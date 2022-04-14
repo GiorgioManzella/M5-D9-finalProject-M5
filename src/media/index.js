@@ -36,7 +36,7 @@ mediasRouter.post("/", async (req, res, next) => {
 
 //post review with id
 
-mediasRouter.post("/Poster", async (req, res, next) => {
+mediasRouter.post("/:moviesId/Poster", async (req, res, next) => {
   try {
     const newReview = {
       ...req.body,
@@ -45,10 +45,10 @@ mediasRouter.post("/Poster", async (req, res, next) => {
     };
     const moviesArray = await getMovies();
     const selectedMovies = moviesArray.find(
-      (element) => element.id === req.params.moviesId
+      (element) => element.id === req.params.Id
     );
 
-    const modifiedMovie = selectedMovies.assign(newReview);
+    const modifiedMovie = await selectedMovies.assign(newReview);
 
     res.status(201).send(modifiedMovie);
   } catch (error) {
@@ -115,6 +115,24 @@ mediasRouter.delete("/:moviesId", async function (req, res, next) {
     );
     await writeMovies(remaningMovies);
     res.status(204).send("movie deleted successfully");
+  } catch (error) {
+    next(error);
+  }
+});
+
+// delete review
+
+mediasRouter.delete("/:moviesId/delete", async function (req, res, next) {
+  try {
+    const movies = await getMovies();
+    const index = movies.findIndex((movie) => movie.Id === req.params.moviesId);
+    const review = movies[index].review;
+
+    if (review) {
+      const reviewArray = delete review.review;
+      res.status(204).send(reviewArray);
+    } else {
+    }
   } catch (error) {
     next(error);
   }
