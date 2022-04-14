@@ -47,7 +47,7 @@ mediasRouter.post("/Poster", async (req, res, next) => {
     const selectedMovies = moviesArray.find(
       (element) => element.id === req.params.moviesId
     );
-    asd;
+
     const modifiedMovie = selectedMovies.assign(newReview);
 
     res.status(201).send(modifiedMovie);
